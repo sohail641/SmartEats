@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Kitchen Orders - Foodie-Frenzy</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;700&display=swap"
+        rel="stylesheet">
+        <link rel="stylesheet" href="kitchen.css">
+</head>
+
+<body>
+
+    <header class="kitchen-header">
+        <a href="live-orders.html" class="logo">
+            <i class="fa-solid fa-fire-burner"></i>
+            <span>Kitchen Portal</span>
+        </a>
+        <button id="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+    </header>
+
+    <main class="container">
+        <h2><i class="fa-solid fa-bell-concierge"></i> Live Orders</h2>
+
+        <div id="order-grid">
+        </div>
+
+        <div id="no-orders-msg" style="display: none;">
+            <p>No pending orders at the moment.</p>
+        </div>
+    </main>
+
+
+    <script>
+        const orderGrid = document.getElementById('order-grid');
+        const noOrdersMsg = document.getElementById('no-orders-msg');
+        const logoutBtn = document.getElementById('logout-btn');
+        const kitchenToken = localStorage.getItem('canteen_kitchen_token');
+
+        // --- 1. Auth Check ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!kitchenToken) {
+                window.location.href = 'kitchen-login.html';
+                return;
+            }
+
+            // Fetch orders immediately
+            fetchOrders();
+            setInterval(fetchOrders, 10000);
+        });
+
+        // --- 2. Logout ---
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('canteen_kitchen_token');
+            window.location.href = 'kitchen-login.html';
+        });
+
+        // --- 3. Fetch Orders ---
+        async function fetchOrders() {
+            try {
+                const res = await fetch('http://localhost:5000/api/orders', {
+                    headers: { 'x-auth-token': kitchenToken }
+                });
+                if (!res.ok) {
+                    throw new Error('Failed to fetch');
+                }
+                const orders = await res.json();
+                renderOrders(orders);
+            } catch (err) {
+                console.error('Error fetching orders:', err);
+            }
+        }
+
+        // --- 4. Render Orders (Updated) ---
+        function renderOrders(orders) {
+            orderGrid.innerHTML = ''; 
+            const pendingOrders = orders.filter(order => order.status === 'Pending');
+
+            if (pendingOrders.length === 0) {
+                noOrdersMsg.style.display = 'block';
+            } else {
+                noOrdersMsg.style.display = 'none';
+            }
+
+            pendingOrders.forEach(order => {
+                const card = document.createElement('div');
+                card.className = 'order-card';
+                const itemsListHtml = order.items.map(item =>
+                    `<li><strong>${item.quantity} x</strong> ${item.name}</li>`
+                ).join('');
+
+                const orderTime = new Date(order.createdAt).toLocaleTimeString('en-US', {
+                    hour: '2-digit', minute: '2-digit'
+                });
+
+                card.innerHTML = `
+                    <div class="order-card-header">
+                        <h3>Order: #${order._id.slice(-6)}</h3>
+                        <p>For: <strong>${order.customerName}</strong> | ${orderTime}</p>
+                    </div>
+                    <div class="order-card-body">
+                        <ul>
+                            ${itemsListHtml}
+                        </ul>
+                    </div>
+                    <div class="order-card-footer">
+                        <button class="complete-btn" data-id="${order._id}">
+                            <i class="fa-solid fa-check"></i> Mark as Completed
+                        </button>
+                    </div>
+                `;
+                orderGrid.appendChild(card);
+            });
+        }
+
+        // --- 5. Complete Order (Event Delegation) ---
+        orderGrid.addEventListener('click', async (e) => {
+            
+            const completeButton = e.target.closest('.complete-btn');
+
+            if (completeButton) {
+                const orderId = completeButton.getAttribute('data-id');
+                completeButton.disabled = true;
+                completeButton.textContent = 'Completing...';
+
+                try {
+                    const res = await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-auth-token': kitchenToken
+                        },
+                        body: JSON.stringify({ status: 'Completed' })
+                    });
+
+                    if (res.ok) {
+                        completeButton.closest('.order-card').remove();
+                        if (orderGrid.children.length === 0) {
+                            noOrdersMsg.style.display = 'block';
+                        }
+                    } else {
+                        alert('Failed to update order.');
+                        completeButton.disabled = false;
+                        completeButton.innerHTML = '<i class="fa-solid fa-check"></i> Mark as Completed';
+                    }
+                } catch (err) {
+                    console.error('Error updating order:', err);
+                    alert('Failed to update order.');
+                    completeButton.disabled = false;
+                    completeButton.innerHTML = '<i class="fa-solid fa-check"></i> Mark as Completed';
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

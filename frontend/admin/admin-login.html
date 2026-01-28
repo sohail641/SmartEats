@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Foodie-Frenzy</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+    --bg-dark: #F4F7FC;         
+    --bg-light: #FFFFFF;        
+    --primary-blue: #1E90FF;   
+    --secondary-blue: #1565C0;  
+    --text-dark: #002B55;       
+    --text-muted: #6C7A89;    
+    --danger-red: #D9534F;      
+    --danger-red-hover: #C9302C;
+    --primary-orange: #1E90FF;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Poppins', sans-serif;
+    --radius: 12px;
+    --shadow: 0 6px 18px rgba(0,0,0,0.10);
+}
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: var(--bg-light);
+            padding: 2.5rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            text-align: center;
+            border-top: 4px solid var(--primary-orange);
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+        .login-header i {
+            font-size: 2.5rem;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
+        }
+        .login-header h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 2px solid var(--bg-dark);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-body);
+            font-size: 1rem;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-orange);
+            color: var(--bg-dark);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            opacity: 0.8;
+            transform: translateY(-3px);
+        }
+        
+        .message {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+        .message.error {
+            color: #d9534f;
+        }
+        .message.success {
+            color: #5cb85c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-header">
+            <i class="fa-solid fa-user-shield"></i>
+            <h2>Admin Portal</h2>
+        </div>
+        
+        <form id="admin-login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        
+        <div id="message-container" class="message"></div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('admin-login-form');
+        const messageContainer = document.getElementById('message-container');
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            messageContainer.textContent = '';
+            messageContainer.className = 'message';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const loginData = {
+                email: email,
+                password: password
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // --- CRITICAL ADMIN CHECK ---
+                    if (data.role === 'admin') {
+                        messageContainer.textContent = 'Login successful! Redirecting...';
+                        messageContainer.classList.add('success');
+
+                        // Save the admin token
+                        localStorage.setItem('canteen_admin_token', data.token);
+                        
+                        // Redirect to the admin dashboard
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html'; 
+                        }, 1500);
+                        
+                    } else {
+                        // If a customer or kitchen staff tries to log in
+                        messageContainer.textContent = 'Access Denied: Not an admin account.';
+                        messageContainer.classList.add('error');
+                    }
+                } else {
+                    // If login details are wrong (e.g., "Invalid Credentials")
+                    messageContainer.textContent = data.msg || 'Login failed. Please try again.';
+                    messageContainer.classList.add('error');
+                }
+
+            } catch (err) {
+                console.error('Error:', err);
+                messageContainer.textContent = 'Error connecting to the server.';
+                messageContainer.classList.add('error');
+            }
+        });
+    </script>
+
+</body>
+</html>

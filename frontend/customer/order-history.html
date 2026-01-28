@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - SmartEats</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="modal.css"> <style>
+        /* Page Specific Styles */
+        .history-container {
+            padding: 3rem 2rem;
+            min-height: 60vh;
+        }
+        .history-container h2 {
+            font-family: var(--font-heading);
+            color: var(--primary-orange);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+        
+        .order-card {
+            background-color: var(--bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-orange);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        .order-header h3 {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+        .order-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--bg-dark);
+        }
+        .status-pending { background-color: #f0ad4e; } 
+        .status-completed { background-color: lawngreen; } 
+        .status-cancelled { background-color: #d9534f; } 
+        
+        .order-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .order-items li {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #444;
+        }
+        .order-items li:last-child { border-bottom: none; }
+        
+        .order-footer {
+            margin-top: 1rem;
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-orange);
+        }
+        
+        #loading-msg {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">SmartEats</a>
+            <div class="navbar-links-desktop">
+                <nav class="navbar-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="menu.html" class="nav-link">Menu</a>
+                    <a href="order-history.html" class="nav-link active">Order</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+                <button class="btn btn-login logged-out" id="login-btn-desktop">Login</button>
+                <button class="btn btn-logout logged-in" id="logout-btn-desktop">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+            <button class="navbar-toggle-btn" id="navbar-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-nav-sidebar" id="mobile-nav-sidebar">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="navbar-brand">SmartEats</a>
+            <button class="close-btn" id="close-menu-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <nav class="mobile-nav">
+            <a href="index.html" class="mobile-nav-link">
+                <i class="fa-solid fa-house"></i><span>Home</span>
+            </a>
+            <a href="menu.html" class="mobile-nav-link">
+                <i class="fa-solid fa-utensils"></i><span>Menu</span>
+            </a>
+            <a href="about.html" class="mobile-nav-link">
+                <i class="fa-solid fa-star"></i><span>About</span>
+            </a>
+            <a href="contact.html" class="mobile-nav-link">
+                <i class="fa-solid fa-phone"></i><span>Contact</span>
+            </a>
+            <hr class="nav-divider">
+            <a href="#" class="mobile-nav-link"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+        </nav>
+        <button class="btn btn-login-mobile logged-out" id="login-btn-mobile">
+            <i class="fa-solid fa-right-to-bracket"></i><span>Login</span>
+        </button>
+        <button class="btn btn-logout-mobile logged-in" id="logout-btn-mobile">
+            <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+        </button>
+    </div>
+
+    <main class="container history-container">
+        <h2>My Past Orders</h2>
+        <div id="orders-container"></div>
+        <p id="loading-msg">Loading your order history...</p>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="menu.html" class="btn btn-cta">Order More Food</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h3>SmartEats</h3>
+                <p>Your canteen, faster. Skip the queue, order ahead, and savor every moment of your break.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="menu.html" class="footer-link">Menu</a>
+                <a href="about.html" class="footer-link">About Us</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+            <div class="footer-col">
+                <h4>Social Connect</h4>
+                <div class="social-icons">
+                    <span>FB</span> <span>IN</span> <span>TW</span> <span>YT</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 SmartEats. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="login-modal-overlay">
+        <div class="login-modal">
+            <button class="login-modal-close" id="login-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="login-modal-header"><i class="fa-solid fa-utensils"></i> SmartEats</div>
+            <form id="customer-login-form">
+                <div class="modal-form-group"><label>Email</label><input type="email" id="modal-email" required></div>
+                <div class="modal-form-group"><label>Password</label><input type="password" id="modal-password" required><i class="fa-solid fa-eye password-toggle" id="password-toggle"></i></div>
+                <div class="modal-remember-me"><label><input type="checkbox" id="remember-me"> Remember me</label></div>
+                <button type="submit" class="modal-btn-primary">Sign In</button>
+                <div id="modal-message" class="modal-message"></div>
+            </form>
+            <a href="#" class="modal-create-account" id="open-register-modal">Create New Account</a>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="register-modal-overlay">
+        <div class="login-modal">
+            <button class="login-modal-close" id="register-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="login-modal-header">Create Account</div>
+            <form id="customer-register-form">
+                <div class="modal-form-group"><label>Username</label><input type="text" id="reg-username" required></div>
+                <div class="modal-form-group"><label>Email</label><input type="email" id="reg-email" required></div>
+                <div class="modal-form-group"><label>Password</label><input type="password" id="reg-password" required></div>
+                <button type="submit" class="modal-btn-primary">Sign Up</button>
+                <div id="register-message" class="modal-message"></div>
+            </form>
+            <a href="#" class="modal-create-account" id="open-login-link">Already have an account? Sign In</a>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+
+    <script>
+        const ordersContainer = document.getElementById('orders-container');
+        const loadingMsg = document.getElementById('loading-msg');
+        
+        // Use the token from LocalStorage to fetch data
+        const authToken = localStorage.getItem('canteen_customer_token') || sessionStorage.getItem('canteen_customer_token');
+
+        // Note: The redirection check is already handled by main.js's checkLoginState,
+        // but we add a specific check here to ensure we don't fetch with a null token.
+        if (authToken) {
+            fetchOrderHistory();
+        } else {
+            // main.js will likely handle this, but just in case:
+            loadingMsg.innerHTML = '<a href="#" onclick="document.getElementById(\'login-btn-desktop\').click()">Please Login</a> to see history.';
+        }
+
+        async function fetchOrderHistory() {
+            try {
+                const response = await fetch('http://localhost:5000/api/orders/myhistory', {
+                    headers: { 'x-auth-token': authToken }
+                });
+                
+                if (!response.ok) throw new Error('Failed to fetch');
+                
+                const orders = await response.json();
+                renderHistory(orders);
+            } catch (err) {
+                console.error(err);
+                loadingMsg.textContent = 'Could not load history.';
+                loadingMsg.style.color = '#d9534f';
+            }
+        }
+        
+        function renderHistory(orders) {
+            ordersContainer.innerHTML = '';
+            if (orders.length === 0) {
+                loadingMsg.textContent = "You haven't ordered anything yet!";
+            } else {
+                loadingMsg.style.display = 'none';
+            }
+            
+            orders.forEach(order => {
+                const card = document.createElement('div');
+                card.className = 'order-card';
+                
+                const date = new Date(order.createdAt).toLocaleDateString();
+                const statusClass = `status-${order.status.toLowerCase()}`;
+                
+                // Safety check for items array
+                const itemsHtml = (order.items || []).map(item => `
+                    <li>
+                        <span>${item.quantity} x ${item.name}</span>
+                        <span>₹${item.price}</span>
+                    </li>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="order-header">
+                        <h3>Order Date: ${date}</h3>
+                        <span class="order-status ${statusClass}">${order.status}</span>
+                    </div>
+                    <ul class="order-items">
+                        ${itemsHtml}
+                    </ul>
+                    <div class="order-footer">
+                        Total: ₹${order.totalPrice.toFixed(2)}
+                    </div>
+                `;
+                ordersContainer.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>

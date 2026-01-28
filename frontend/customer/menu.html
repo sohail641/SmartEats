@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - SmartEats</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="modal.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">SmartEats</a>
+            <div class="navbar-links-desktop">
+                <nav class="navbar-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="menu.html" class="nav-link active">Menu</a>
+                    <a href="order-history.html" class="nav-link">Order</a> 
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+                <button class="btn btn-login logged-out" id="login-btn-desktop">Login</button>
+                <button class="btn btn-logout logged-in" id="logout-btn-desktop">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+            <button class="navbar-toggle-btn" id="navbar-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-nav-sidebar" id="mobile-nav-sidebar">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="navbar-brand">SmartEats</a>
+            <button class="close-btn" id="close-menu-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <nav class="mobile-nav">
+            <a href="index.html" class="mobile-nav-link">
+                <i class="fa-solid fa-house"></i><span>Home</span>
+            </a>
+            <a href="menu.html" class="mobile-nav-link active-page"> <i
+                    class="fa-solid fa-utensils"></i><span>Menu</span>
+            </a>
+            <a href="about.html" class="mobile-nav-link">
+                <i class="fa-solid fa-star"></i><span>About</span>
+            </a>
+            <a href="contact.html" class="mobile-nav-link">
+                <i class="fa-solid fa-phone"></i><span>Contact</span>
+            </a>
+            <hr class="nav-divider">
+            <a href="#" class="mobile-nav-link"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+        </nav>
+        <button class="btn btn-login-mobile logged-out" id="login-btn-mobile">
+            <i class="fa-solid fa-right-to-bracket"></i><span>Login</span>
+        </button>
+        <button class="btn btn-logout-mobile logged-in" id="logout-btn-mobile">
+            <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+        </button>
+    </div>
+
+    <main class="menu-page-container container">
+
+        <div class="menu-container">
+            <h2>Our Full Menu</h2>
+            <div class="menu-items-grid" id="menu-items-grid">
+                <p>Loading menu...</p>
+            </div>
+        </div>
+
+        <div class="cart-container">
+            <h3>Your Order</h3>
+            <ul id="cart-items">
+                <li id="empty-cart-msg">Your cart is empty.</li>
+            </ul>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">₹0.00</span>
+            </div>
+            <button id="place-order-btn" class="btn btn-cta" disabled>Place Order</button>
+            <div id="order-message"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h3>SmartEats</h3>
+                <p>Your canteen, faster. Skip the queue, order ahead, and savor every moment of your break.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="menu.html" class="footer-link">Menu</a>
+                <a href="about.html" class="footer-link">About Us</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+            <div class="footer-col">
+                <h4>Social Connect</h4>
+                <div class="social-icons">
+                    <span>FB</span> <span>IN</span> <span>TW</span> <span>YT</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 SmartEats. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="login-modal-overlay">
+        <div class="login-modal">
+            <button class="login-modal-close" id="login-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="login-modal-header">
+                <i class="fa-solid fa-utensils"></i> SmartEats
+            </div>
+            <form id="customer-login-form">
+                <div class="modal-form-group">
+                    <label for="modal-email">Email</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="modal-email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="modal-password">Password</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="modal-password" name="password" placeholder="Enter your password"
+                            required>
+                        <i class="fa-solid fa-eye password-toggle" id="password-toggle"></i>
+                    </div>
+                </div>
+                <div class="modal-remember-me">
+                    <label>
+                        <input type="checkbox" id="remember-me"> Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="submit" class="modal-btn-primary">
+                    Sign In <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <div id="modal-message" class="modal-message"></div>
+            </form>
+            <a href="#" class="modal-create-account" id="open-register-modal">
+                <i class="fa-solid fa-user-plus"></i> Create New Account
+            </a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="register-modal-overlay">
+        <div class="login-modal">
+            <button class="login-modal-close" id="register-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="login-modal-header">
+                <i class="fa-solid fa-user-plus"></i> Create Account
+            </div>
+            <form id="customer-register-form">
+                <div class="modal-form-group">
+                    <label for="reg-username">Username</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="reg-username" placeholder="Choose a username" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="reg-email">Email</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="reg-password">Password</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="Create a password" required>
+                    </div>
+                </div>
+                <button type="submit" class="modal-btn-primary">
+                    Sign Up <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <div id="register-message" class="modal-message"></div>
+            </form>
+            <a href="#" class="modal-create-account" id="open-login-link">
+                <i class="fa-solid fa-right-to-bracket"></i> Already have an account? Sign In
+            </a>
+        </div>
+    </div>
+
+
+    <script>
+        // --- 1. GET ALL ELEMENTS ---
+        // Mobile Menu
+        const toggleButton = document.getElementById('navbar-toggle');
+        const closeButton = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-nav-sidebar');
+
+        // Login/Logout Buttons
+        const loginBtnDesktop = document.getElementById('login-btn-desktop');
+        const loginBtnMobile = document.getElementById('login-btn-mobile');
+        const logoutBtnDesktop = document.getElementById('logout-btn-desktop');
+        const logoutBtnMobile = document.getElementById('logout-btn-mobile');
+
+        // Login Modal
+        const loginModalOverlay = document.getElementById('login-modal-overlay');
+        const loginModalCloseBtn = document.getElementById('login-modal-close');
+        const customerLoginForm = document.getElementById('customer-login-form');
+        const modalMessage = document.getElementById('modal-message');
+        const passwordInput = document.getElementById('modal-password');
+        const passwordToggleButton = document.getElementById('password-toggle');
+        const openRegisterModalBtn = document.getElementById('open-register-modal');
+
+        // Register Modal
+        const registerModalOverlay = document.getElementById('register-modal-overlay');
+        const registerModalCloseBtn = document.getElementById('register-modal-close');
+        const customerRegisterForm = document.getElementById('customer-register-form');
+        const registerMessage = document.getElementById('register-message');
+        const openLoginLink = document.getElementById('open-login-link');
+
+        // Menu Page Globals
+        const menuGrid = document.getElementById('menu-items-grid');
+        const cartItemsList = document.getElementById('cart-items');
+        const emptyCartMsg = document.getElementById('empty-cart-msg');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const orderMessage = document.getElementById('order-message');
+        let cart = [];
+
+        // --- 2. CHECK LOGIN STATE ---
+        function checkLoginState() {
+            // !! FIX: Check for the correct token name
+            const token = localStorage.getItem('canteen_customer_token') || sessionStorage.getItem('canteen_customer_token');
+            if (token) {
+                document.body.classList.add('is-logged-in');
+                return token; // Return the token if found
+            } else {
+                document.body.classList.remove('is-logged-in');
+                return null; // Return null if not found
+            }
+        }
+
+        // --- 3. LOGOUT FUNCTION ---
+        function logout() {
+            localStorage.removeItem('canteen_customer_token');
+            sessionStorage.removeItem('canteen_customer_token');
+            window.location.href = 'index.html'; // Go to home page on logout
+        }
+
+        // --- 4. Helper function to reset forms
+        function resetForms() {
+            customerLoginForm.reset();
+            customerRegisterForm.reset();
+            modalMessage.textContent = '';
+            registerMessage.textContent = '';
+        }
+
+        // --- 5. EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = checkLoginState();
+
+            // !! FIX: Check for token and redirect to HOME page if missing
+            if (!token) {
+                window.location.href = 'index.html';
+                // You could also add ?login=true to the URL to auto-open the modal
+            } else {
+                // User is logged in, so load the menu
+                fetchMenu();
+            }
+
+            // Mobile Menu Toggle
+            if (toggleButton && closeButton && mobileMenu) {
+                const openMenu = () => mobileMenu.classList.add('active');
+                const closeMenu = () => mobileMenu.classList.remove('active');
+                toggleButton.addEventListener('click', openMenu);
+                closeButton.addEventListener('click', closeMenu);
+            }
+
+            // --- Login Modal Listeners ---
+            loginBtnDesktop.addEventListener('click', () => {
+                resetForms();
+                loginModalOverlay.style.display = 'flex';
+            });
+            loginBtnMobile.addEventListener('click', () => {
+                resetForms();
+                loginModalOverlay.style.display = 'flex';
+                mobileMenu.classList.remove('active');
+            });
+            loginModalCloseBtn.addEventListener('click', () => {
+                loginModalOverlay.style.display = 'none';
+            });
+            loginModalOverlay.addEventListener('click', (e) => {
+                if (e.target === loginModalOverlay) {
+                    loginModalOverlay.style.display = 'none';
+                }
+            });
+            passwordToggleButton.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                passwordToggleButton.classList.toggle('fa-eye');
+                passwordToggleButton.classList.toggle('fa-eye-slash');
+            });
+            customerLoginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                modalMessage.textContent = 'Logging in...';
+                const email = document.getElementById('modal-email').value;
+                const password = document.getElementById('modal-password').value;
+                const rememberMe = document.getElementById('remember-me').checked;
+
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await response.json();
+                    if (response.ok && data.role === 'customer') {
+                        if (rememberMe) {
+                            localStorage.setItem('canteen_customer_token', data.token);
+                        } else {
+                            sessionStorage.setItem('canteen_customer_token', data.token);
+                        }
+                        modalMessage.textContent = 'Login successful! Refreshing...';
+                        setTimeout(() => { window.location.reload(); }, 1000);
+                    } else {
+                        modalMessage.textContent = data.msg || 'Login failed.';
+                        modalMessage.style.color = '#d9534f';
+                    }
+                } catch (err) {
+                    modalMessage.textContent = 'Error connecting to the server.';
+                    modalMessage.style.color = '#d9534f';
+                }
+            });
+
+            // --- Logout Button Listeners ---
+            logoutBtnDesktop.addEventListener('click', logout);
+            logoutBtnMobile.addEventListener('click', logout);
+
+            // --- REGISTER MODAL LOGIC ---
+            openRegisterModalBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetForms();
+                loginModalOverlay.style.display = 'none';
+                registerModalOverlay.style.display = 'flex';
+            });
+            openLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetForms();
+                registerModalOverlay.style.display = 'none';
+                loginModalOverlay.style.display = 'flex';
+            });
+            registerModalCloseBtn.addEventListener('click', () => {
+                registerModalOverlay.style.display = 'none';
+            });
+            registerModalOverlay.addEventListener('click', (e) => {
+                if (e.target === registerModalOverlay) {
+                    registerModalOverlay.style.display = 'none';
+                }
+            });
+            customerRegisterForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                registerMessage.textContent = 'Creating account...';
+                const username = document.getElementById('reg-username').value;
+                const email = document.getElementById('reg-email').value;
+                const password = document.getElementById('reg-password').value;
+                const registerData = { username, email, password, role: 'customer' };
+
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(registerData)
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        registerMessage.textContent = 'Success! Please log in.';
+                        setTimeout(() => {
+                            registerModalOverlay.style.display = 'none';
+                            loginModalOverlay.style.display = 'flex';
+                            resetForms();
+                        }, 2000);
+                    } else {
+                        registerMessage.textContent = data.msg || 'Registration failed.';
+                        registerMessage.style.color = '#d9534f';
+                    }
+                } catch (err) {
+                    registerMessage.textContent = 'Error connecting to the server.';
+                    registerMessage.style.color = '#d9534f';
+                }
+            });
+        });
+
+        // --- 6. MENU & CART FUNCTIONS ---
+        async function fetchMenu() {
+            try {
+                const response = await fetch('http://localhost:5000/api/menu');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch menu');
+                }
+                const menuItems = await response.json();
+                renderMenu(menuItems);
+            } catch (err) {
+                console.error(err);
+                menuGrid.innerHTML = '<p>Error loading menu. Please try again later.</p>';
+            }
+        }
+
+        function renderMenu(items) {
+            menuGrid.innerHTML = '';
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'menu-card';
+                card.innerHTML = `
+                    <div class="menu-card-img-container">
+                        <img src="${item.imageUrl || 'https.via.placeholder.com/300x200'}" alt="${item.name}">
+                    </div>
+                    <div class="menu-card-body">
+                        <h3>${item.name}</h3>
+                        <p>${item.description || 'No description available.'}</p>
+                    </div>
+                    <div class="menu-card-footer">
+                        <span class="price">₹${item.price.toFixed(2)}</span>
+                        <button class="add-btn">
+                            <i class="fa-solid fa-plus"></i> Add
+                        </button>
+                    </div>
+                `;
+                card.querySelector('.add-btn').addEventListener('click', () => {
+                    addToCart(item);
+                });
+                menuGrid.appendChild(card);
+            });
+        }
+
+        function addToCart(item) {
+            const existingItem = cart.find(cartItem => cartItem.id === item._id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id: item._id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: 1
+                });
+            }
+            renderCart();
+        }
+
+        function renderCart() {
+            cartItemsList.innerHTML = '';
+            let total = 0;
+            if (cart.length === 0) {
+                cartItemsList.appendChild(emptyCartMsg);
+                placeOrderBtn.disabled = true;
+            } else {
+                placeOrderBtn.disabled = false;
+                cart.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-qty">x${item.quantity}</span>
+                        <span class="item-price">₹${(item.price * item.quantity).toFixed(2)}</span>
+                    `;
+                    cartItemsList.appendChild(li);
+                    total += item.price * item.quantity;
+                });
+            }
+            cartTotalPrice.textContent = `₹${total.toFixed(2)}`;
+        }
+
+        placeOrderBtn.addEventListener('click', async () => {
+            if (cart.length === 0) return;
+
+            const orderData = {
+                items: cart.map(item => ({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity
+                })),
+                totalPrice: cart.reduce((total, item) => total + item.price * item.quantity, 0),
+            };
+
+            try {
+                placeOrderBtn.disabled = true;
+                orderMessage.textContent = 'Placing order...';
+
+                // !! This line is correct in your code, but make sure the token logic above is fixed !!
+                const token = localStorage.getItem('canteen_customer_token') || sessionStorage.getItem('canteen_customer_token');
+
+                const response = await fetch('http://localhost:5000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-auth-token': token
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (response.ok) {
+                    orderMessage.textContent = 'Order placed successfully!';
+                    orderMessage.style.color = '#5cb85c';
+                    cart = [];
+                    renderCart();
+                    setTimeout(() => { orderMessage.textContent = ''; }, 3000);
+                } else {
+                    throw new Error('Order failed');
+                }
+            } catch (err) {
+                console.error(err);
+                orderMessage.textContent = 'Failed to place order. Please try again.';
+                orderMessage.style.color = 'red';
+                placeOrderBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,452 @@
+/* Import Google Fonts & Icons */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+
+/* === 1. GLOBAL & THEME === */
+/* frontend/admin/admin.css */
+:root {
+    --bg-dark: #F4F7FC;         
+    --bg-light: #FFFFFF;        
+
+    --primary-blue: #1E90FF;   
+    --secondary-blue: #7fb5f3;  
+    --text-dark: #002B55;       
+    --text-muted: #6C7A89;    
+    --danger-red: #D9534F;      
+    --danger-red-hover: #C9302C;
+    --primary-orange: #1E90FF;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Poppins', sans-serif;
+    --radius: 12px;
+    --shadow: 0 6px 18px rgba(0,0,0,0.10);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+}
+
+/* === 2. ADMIN HEADER (NAVBAR) === */
+.admin-header {
+    background-color: var(--bg-light);
+    border-bottom: 2px solid var(--primary-orange);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--text-light);
+    text-decoration: none;
+}
+.admin-header .logo i {
+    color: var(--primary-orange);
+    font-size: 1.8rem;
+}
+
+.admin-nav {
+    display: flex;
+    gap: 0.5rem;
+}
+.nav-tab {
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+.nav-tab i {
+    font-size: 0.8rem;
+}
+.nav-tab:hover {
+    border-color: var(--primary-orange);
+    color: var(--primary-orange);
+}
+.nav-tab.active {
+    background-color: var(--primary-orange);
+    border-color: var(--primary-orange);
+    color: var(--bg-dark);
+}
+
+/* === 3. MAIN CONTENT & SECTIONS === */
+.admin-content {
+    padding: 2rem;
+}
+
+/* This is the class that hides/shows the pages */
+.admin-section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+.admin-section.active {
+    display: block;
+}
+
+/* === 4. "ADD NEW ITEM" FORM STYLES === */
+.form-card {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: var(--secondary-blue);
+    border-radius: 16px;
+    padding: 2rem 3rem;
+}
+.form-card h2 {
+    font-family: var(--font-heading);
+    color: var(--primary-orange);
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-light);
+}
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    font-family: var(--font-body);
+    font-size: 1rem;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+}
+
+/* Image Upload Box */
+.upload-box {
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.upload-box:hover {
+    border-color: var(--primary-orange);
+    background-color: var(--bg-light);
+}
+.upload-box i {
+    font-size: 2rem;
+    color: var(--primary-orange);
+    margin-bottom: 1rem;
+}
+.upload-box p {
+    color: var(--text-muted);
+}
+.upload-box input[type="file"] {
+    display: none; /* We hide the actual input */
+}
+
+/* Container for previewing the selected image */
+#image-preview-container {
+    display: none; /* Hidden by default */
+    margin-top: 1rem;
+}
+#image-preview {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--primary-orange);
+    color: var(--bg-dark);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+.btn-submit:hover {
+    opacity: 0.8;
+}
+#form-message {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* === 5. "ORDER MANAGEMENT" LIST STYLES === */
+.order-list-card {
+    background-color: var(--bg-card);
+    border-radius: 16px;
+    padding: 2rem;
+}
+.order-list-card h2 {
+    font-family: var(--font-heading);
+    color: var(--primary-orange);
+    margin-bottom: 2rem;
+}
+
+/* Order Table Header */
+.order-list-header {
+    display: grid;
+    /* This grid matches your screenshot columns */
+    grid-template-columns: 1fr 1.5fr 1.5fr 2fr 1fr 1fr 1fr;
+    gap: 1rem;
+    padding: 0 1rem 1rem 1rem;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Order Table Row */
+.order-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1.5fr 2fr 1fr 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.order-row:last-child {
+    border-bottom: none;
+}
+
+/* Column Styles */
+.order-id {
+    font-weight: 700;
+    color: var(--text-light);
+}
+.customer-details {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+.customer-details span {
+    display: block;
+}
+.customer-details span:first-child {
+    font-weight: 700;
+    color: var(--text-light);
+}
+.customer-details span:last-child {
+    color: var(--text-muted);
+}
+.order-address, .order-total-items, .order-price {
+    font-size: 0.9rem;
+}
+.order-price {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Items in Order */
+.order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+.order-item img {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+.order-item-info {
+    line-height: 1.3;
+}
+.order-item-info span {
+    display: block;
+}
+.order-item-info span:last-child {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* Payment & Status */
+.payment-status span {
+    display: block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+    width: fit-content;
+}
+.payment-status .online {
+    background-color: var(--online);
+    color: var(--text-light);
+}
+.payment-status .cod {
+    background-color: var(--cod);
+    color: var(--bg-dark);
+}
+
+.order-actions .complete-btn {
+    background-color: transparent;
+    border: 1px solid var(--success);
+    color: var(--success);
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.order-actions .complete-btn:hover {
+    background-color: var(--success);
+    color: var(--text-light);
+}
+.order-actions .complete-btn.completed {
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+/* === 6. "LIST ITEMS" PAGE STYLES === */
+/* We'll re-use the order list styles for the menu list */
+.menu-list-card {
+    background-color: var(--bg-card);
+    border-radius: 16px;
+    padding: 2rem;
+}
+.menu-list-card h2 {
+    font-family: var(--font-heading);
+    color: var(--primary-orange);
+    margin-bottom: 2rem;
+}
+.menu-list-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 1rem;
+    padding: 0 1rem 1rem 1rem;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+.menu-item-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.menu-item-details {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.menu-item-details img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+.menu-item-info h4 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+.menu-item-info p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+.menu-item-price {
+    font-weight: 700;
+}
+.menu-item-category {
+    font-size: 0.9rem;
+}
+.menu-item-actions .delete-btn {
+    background-color: #d9534f;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+.menu-item-actions .delete-btn:hover {
+    opacity: 0.8;
+}
+
+/* === 7. ANIMATIONS & RESPONSIVENESS === */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1200px) {
+    .order-list-header, .order-row, .menu-list-header, .menu-item-row {
+        /* On smaller screens, allow horizontal scrolling */
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 1rem;
+    }
+    .order-list-card, .menu-list-card {
+        padding: 1rem;
+    }
+}
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .admin-nav {
+        width: 100%;
+        justify-content: space-around;
+    }
+    .nav-tab {
+        padding: 0.5rem;
+        flex-grow: 1;
+        justify-content: center;
+    }
+    .form-card {
+        padding: 1.5rem;
+    }
+    .admin-content {
+        padding: 1rem;
+    }
+}

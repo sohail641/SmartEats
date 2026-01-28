@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - SmartEats</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="modal.css"> <style>
+        /* === PAGE SPECIFIC STYLES === */
+        .page-container {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            min-height: 70vh;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: slideUp 1s ease-out;
+        }
+
+        .page-header h1 {
+            font-family: var(--font-heading);
+            color: var(--primary-orange);
+            font-size: 2.5rem;
+        }
+
+        .page-header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .page-content {
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        /* === CONTACT PAGE STYLES === */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            animation: slideUp 1s ease-out 0.2s;
+            animation-fill-mode: both;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 2px solid #555;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-body);
+            font-size: 1rem;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .contact-form .btn-cta {
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            color: var(--text-muted);
+            animation: fadeIn 1s ease-out 0.4s;
+            animation-fill-mode: both;
+        }
+
+        .contact-info h3 {
+            font-family: var(--font-heading);
+            color: var(--primary-orange);
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info p {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+
+        .contact-info p i {
+            color: var(--primary-orange);
+            font-size: 1.1rem;
+            margin-top: 0.25rem;
+        }
+
+        /* === RESPONSIVENESS === */
+        @media (max-width: 768px) {
+            .contact-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* === ANIMATION KEYFRAMES === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">SmartEats</a>
+            <div class="navbar-links-desktop">
+                <nav class="navbar-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="menu.html" class="nav-link">Menu</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="contact.html" class="nav-link active">Contact</a>
+                </nav>
+                <button class="btn btn-login logged-out" id="login-btn-desktop">Login</button>
+                <button class="btn btn-logout logged-in" id="logout-btn-desktop">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+            <button class="navbar-toggle-btn" id="navbar-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-nav-sidebar" id="mobile-nav-sidebar">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="navbar-brand">SmartEats</a>
+            <button class="close-btn" id="close-menu-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <nav class="mobile-nav">
+            <a href="index.html" class="mobile-nav-link">
+                <i class="fa-solid fa-house"></i><span>Home</span>
+            </a>
+            <a href="menu.html" class="mobile-nav-link">
+                <i class="fa-solid fa-utensils"></i><span>Menu</span>
+            </a>
+            <a href="about.html" class="mobile-nav-link">
+                <i class="fa-solid fa-star"></i><span>About</span>
+            </a>
+            <a href="contact.html" class="mobile-nav-link active-page">
+                <i class="fa-solid fa-phone"></i><span>Contact</span>
+            </a>
+            <hr class="nav-divider">
+            <a href="#" class="mobile-nav-link"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+        </nav>
+        <button class="btn btn-login-mobile logged-out" id="login-btn-mobile">
+            <i class="fa-solid fa-right-to-bracket"></i><span>Login</span>
+        </button>
+        <button class="btn btn-logout-mobile logged-in" id="logout-btn-mobile">
+            <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+        </button>
+    </div>
+
+    <main class="page-container container">
+        <div class="page-header">
+            <h1>Get In Touch</h1>
+            <p class="subtitle">We'd love to hear from you. Send us a message!</p>
+        </div>
+
+        <div class="page-content contact-layout">
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Your Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-cta">Send Message</button>
+            </form>
+
+            <div class="contact-info">
+                <h3>Contact Details</h3>
+                <p>
+                    <i class="fa-solid fa-location-dot"></i>
+                    123 Foodie Lane, Canteen City, 456789
+                </p>
+                <p>
+                    <i class="fa-solid fa-phone"></i>
+                    +91 12345 67890
+                </p>
+                <p>
+                    <i class="fa-solid fa-envelope"></i>
+                    contact@foodie-frenzy.com
+                </p>
+
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                <p>Saturday: 10:00 AM - 4:00 PM</p>
+                <p>Sunday: Closed</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+
+            <div class="footer-col">
+                <h3>SmartEats</h3>
+                <p>Your canteen, faster. Skip the queue, order ahead, and savor every moment of your break.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="menu.html" class="footer-link">Menu</a>
+                <a href="about.html" class="footer-link">About Us</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Social Connect</h4>
+                <div class="social-icons">
+                    <span>FB</span> <span>IN</span> <span>TW</span> <span>YT</span>
+                </div>
+            </div>
+
+        </div> 
+        <div class="footer-bottom">
+            <p>&copy; 2025 SmartEats. All rights reserved.</p>
+        </div>
+    </footer>
+    <div class="modal-overlay" id="login-modal-overlay">
+        <div class="login-modal">
+            <button class="login-modal-close" id="login-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="login-modal-header">
+                <i class="fa-solid fa-utensils"></i> SmartEats
+            </div>
+            <form id="customer-login-form">
+                <div class="modal-form-group">
+                    <label for="modal-email">Email</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="modal-email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="modal-password">Password</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="modal-password" name="password" placeholder="Enter your password" required>
+                        <i class="fa-solid fa-eye password-toggle" id="password-toggle"></i>
+                    </div>
+                </div>
+                <div class="modal-remember-me">
+                    <label>
+                        <input type="checkbox" id="remember-me"> Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="submit" class="modal-btn-primary">
+                    Sign In <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <div id="modal-message" class="modal-message"></div>
+            </form>
+            <a href="#" class="modal-create-account" id="open-register-modal">
+                <i class="fa-solid fa-user-plus"></i> Create New Account
+            </a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="register-modal-overlay">
+        <div class="login-modal">
+            <button class="login-modal-close" id="register-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="login-modal-header">
+                <i class="fa-solid fa-user-plus"></i> Create Account
+            </div>
+            <form id="customer-register-form">
+                <div class="modal-form-group">
+                    <label for="reg-username">Username</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="reg-username" placeholder="Choose a username" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="reg-email">Email</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="reg-password">Password</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="Create a password" required>
+                    </div>
+                </div>
+                <button type="submit" class="modal-btn-primary">
+                    Sign Up <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <div id="register-message" class="modal-message"></div>
+            </form>
+            <a href="#" class="modal-create-account" id="open-login-link">
+                <i class="fa-solid fa-right-to-bracket"></i> Already have an account? Sign In
+            </a>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>

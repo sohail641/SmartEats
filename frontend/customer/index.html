@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartEats - Home</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="menu.css">
+
+    <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInOverlay 0.3s ease;
+        }
+
+        .login-modal {
+            background-color: var(--bg-light);
+            padding: 2.5rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            width: 450px;
+            max-width: 90%;
+            text-align: center;
+            position: relative;
+            border-top: 4px solid var(--primary-blue);
+            animation: slideInModal 0.3s ease-out;
+        }
+
+        .login-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.2rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .login-modal-close:hover {
+            color: var(--primary-orange);
+        }
+
+        .login-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: var(--primary-orange);
+        }
+
+        .login-modal-header i {
+            font-size: 2rem;
+        }
+
+        .modal-form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+            position: relative;
+        }
+
+        .modal-form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .modal-form-group .input-icon {
+            position: relative;
+        }
+
+        .modal-form-group .input-icon i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .modal-form-group input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 3rem;
+            border-radius: 8px;
+            border: 2px solid var(--bg-dark);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-body);
+            font-size: 1rem;
+        }
+
+        .modal-form-group input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-orange);
+        }
+
+
+        .modal-remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-remember-me label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .modal-remember-me input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--text-muted);
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .modal-remember-me input[type="checkbox"]:checked {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+        }
+
+        .modal-remember-me input[type="checkbox"]:checked::after {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--bg-dark);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+        }
+
+        .modal-remember-me a {
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-remember-me a:hover {
+            opacity: 0.8;
+        }
+
+        .modal-btn-primary {
+            width: 100%;
+            padding: 0.85rem;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-orange);
+            color: var(--bg-dark);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .modal-create-account {
+            margin-top: 1.5rem;
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-create-account:hover {
+            opacity: 0.8;
+        }
+
+        .modal-create-account i {
+            margin-right: 0.5rem;
+        }
+
+        .modal-message {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #d9534f;
+        }
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInModal {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">SmartEats</a>
+            
+            <div class="navbar-links-desktop">
+                <nav class="navbar-nav">
+                    <a href="index.html" class="nav-link active">Home</a>
+                    <a href="menu.html" class="nav-link">Menu</a>
+                    <a href="order-history.html" class="nav-link">Order</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+                <button class="btn btn-login logged-out" id="login-btn-desktop">Login</button>
+                <button class="btn btn-logout logged-in" id="logout-btn-desktop">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+            <button class="navbar-toggle-btn" id="navbar-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-nav-sidebar" id="mobile-nav-sidebar">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="navbar-brand">SmartEats</a>
+            <button class="close-btn" id="close-menu-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <nav class="mobile-nav">
+            <a href="index.html" class="mobile-nav-link active-page">
+                <i class="fa-solid fa-house"></i><span>Home</span>
+            </a>
+            <a href="menu.html" class="mobile-nav-link">
+                <i class="fa-solid fa-utensils"></i><span>Menu</span>
+            </a>
+            <a href="about.html" class="mobile-nav-link">
+                <i class="fa-solid fa-star"></i><span>About</span>
+            </a>
+            <a href="contact.html" class="mobile-nav-link">
+                <i class="fa-solid fa-phone"></i><span>Contact</span>
+            </a>
+            <hr class="nav-divider">
+            <a href="#" class="mobile-nav-link"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+        </nav>
+        <button class="btn btn-login-mobile logged-out" id="login-btn-mobile">
+            <i class="fa-solid fa-right-to-bracket"></i><span>Login</span>
+        </button>
+        <button class="btn btn-logout-mobile logged-in" id="logout-btn-mobile">
+            <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+        </button>
+    </div>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>Skip The Line <br> Grab Your Food</h1>
+                <p>Your canteen favorites, freshly made and ready for pickup. No waiting, just ordering. Hot food, right
+                    on time.</p>
+            </div>
+            <div class="hero-image">
+                <img src="/cms assites/maggie-s.jpg" alt="Woman eating pizza">
+            </div>
+        </div>
+    </section>
+
+    <section class="offers">
+        <div class="container">
+            <h2>Today's Special Offers</h2>
+            <p class="subtitle">Hot, fresh, and trending in the canteen today.</p>
+
+            <div class="menu-items-grid" id="special-offers-grid">
+                <p>Loading special offers...</p>
+            </div>
+
+            <a href="menu.html" class="btn btn-cta">View Full Menu</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            
+            <div class="footer-col">
+                <h3>SmartEats</h3>
+                <p>Your canteen, faster. Skip the queue, order ahead, and savor every moment of your break.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="menu.html" class="footer-link">Menu</a>
+                <a href="about.html" class="footer-link">About Us</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Social Connect</h4>
+                <div class="social-icons">
+                    <span>FB</span> <span>IN</span> <span>TW</span> <span>YT</span>
+                </div>
+            </div>
+        
+        </div> <div class="footer-bottom"> <p>&copy; 2025 SmartEats. All rights reserved.</p>
+        </div>
+    </footer>
+    <div class="modal-overlay" id="login-modal-overlay">
+        <div class="login-modal">
+            <button class="login-modal-close" id="login-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="login-modal-header">
+                <i class="fa-solid fa-utensils"></i> SmartEats
+            </div>
+
+            <form id="customer-login-form">
+                <div class="modal-form-group">
+                    <label for="modal-email">Email</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="modal-email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="modal-password">Password</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="modal-password" name="password" placeholder="Enter your password"
+                            required>
+                        <i class="fa-solid fa-eye password-toggle" id="password-toggle"></i>
+                    </div>
+                </div>
+
+                <div class="modal-remember-me">
+                    <label>
+                        <input type="checkbox" id="remember-me"> Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="modal-btn-primary">
+                    Sign In <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <div id="modal-message" class="modal-message"></div>
+            </form>
+
+            <a href="#" class="modal-create-account" id="open-register-modal">
+                <i class="fa-solid fa-user-plus"></i> Create New Account
+            </a>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="register-modal-overlay">
+        <div class="login-modal">
+            <button class="login-modal-close" id="register-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="login-modal-header">
+                <i class="fa-solid fa-user-plus"></i> Create Account
+            </div>
+
+            <form id="customer-register-form">
+                <div class="modal-form-group">
+                    <label for="reg-username">Username</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="reg-username" placeholder="Choose a username" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="reg-email">Email</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="modal-form-group">
+                    <label for="reg-password">Password</label>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="Create a password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="modal-btn-primary">
+                    Sign Up <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <div id="register-message" class="modal-message"></div>
+            </form>
+
+            <a href="#" class="modal-create-account" id="open-login-link">
+                <i class="fa-solid fa-right-to-bracket"></i> Already have an account? Sign In
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Mobile Menu
+        const toggleButton = document.getElementById('navbar-toggle');
+        const closeButton = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-nav-sidebar');
+        
+        // Login/Logout Buttons
+        const loginBtnDesktop = document.getElementById('login-btn-desktop');
+        const loginBtnMobile = document.getElementById('login-btn-mobile');
+        const logoutBtnDesktop = document.getElementById('logout-btn-desktop');
+        const logoutBtnMobile = document.getElementById('logout-btn-mobile');
+
+        // Login Modal
+        const loginModalOverlay = document.getElementById('login-modal-overlay');
+        const loginModalCloseBtn = document.getElementById('login-modal-close');
+        const customerLoginForm = document.getElementById('customer-login-form');
+        const modalMessage = document.getElementById('modal-message');
+        const passwordInput = document.getElementById('modal-password');
+        const passwordToggleButton = document.getElementById('password-toggle');
+        const openRegisterModalBtn = document.getElementById('open-register-modal');
+
+        // Register Modal (NEW!)
+        const registerModalOverlay = document.getElementById('register-modal-overlay');
+        const registerModalCloseBtn = document.getElementById('register-modal-close');
+        const customerRegisterForm = document.getElementById('customer-register-form');
+        const registerMessage = document.getElementById('register-message');
+        const openLoginLink = document.getElementById('open-login-link');
+
+
+        // --- 2. CHECK LOGIN STATE ---
+        function checkLoginState() {
+            const token = localStorage.getItem('canteen_customer_token') || sessionStorage.getItem('canteen_customer_token');
+            if (token) {
+                document.body.classList.add('is-logged-in');
+            } else {
+                document.body.classList.remove('is-logged-in');
+            }
+        }
+
+        // --- 3. LOGOUT FUNCTION ---
+        function logout() {
+            localStorage.removeItem('canteen_customer_token');
+            sessionStorage.removeItem('canteen_customer_token');
+            window.location.reload();
+        }
+
+        // --- Helper function to reset forms
+        function resetForms() {
+            customerLoginForm.reset();
+            customerRegisterForm.reset();
+            modalMessage.textContent = '';
+            registerMessage.textContent = '';
+        }
+
+        // --- 4. EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoginState(); 
+            fetchSpecialOffers();
+
+            // Mobile Menu Toggle
+            if (toggleButton && closeButton && mobileMenu) {
+                const openMenu = () => mobileMenu.classList.add('active');
+                const closeMenu = () => mobileMenu.classList.remove('active');
+                toggleButton.addEventListener('click', openMenu);
+                closeButton.addEventListener('click', closeMenu);
+            }
+
+            // --- Login Modal Listeners ---
+            loginBtnDesktop.addEventListener('click', () => {
+                resetForms();
+                loginModalOverlay.style.display = 'flex';
+            });
+            loginBtnMobile.addEventListener('click', () => {
+                resetForms();
+                loginModalOverlay.style.display = 'flex';
+                mobileMenu.classList.remove('active');
+            });
+            loginModalCloseBtn.addEventListener('click', () => {
+                loginModalOverlay.style.display = 'none';
+            });
+            loginModalOverlay.addEventListener('click', (e) => {
+                if (e.target === loginModalOverlay) {
+                    loginModalOverlay.style.display = 'none';
+                }
+            });
+
+            // Toggle Password Visibility
+            passwordToggleButton.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                passwordToggleButton.classList.toggle('fa-eye');
+                passwordToggleButton.classList.toggle('fa-eye-slash');
+            });
+
+            // Customer Login Form Submission
+            customerLoginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                modalMessage.textContent = 'Logging in...';
+                const email = document.getElementById('modal-email').value;
+                const password = document.getElementById('modal-password').value;
+                const rememberMe = document.getElementById('remember-me').checked;
+
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await response.json();
+
+                    if (response.ok && data.role === 'customer') {
+                        if (rememberMe) {
+                            localStorage.setItem('canteen_customer_token', data.token);
+                        } else {
+                            sessionStorage.setItem('canteen_customer_token', data.token);
+                        }
+                        modalMessage.textContent = 'Login successful! Refreshing...';
+                        modalMessage.style.color = 'var(--success)';
+                        setTimeout(() => { window.location.reload(); }, 1000);
+                    } else {
+                        modalMessage.textContent = data.msg || 'Login failed. Please check your credentials.';
+                        modalMessage.style.color = '#d9534f';
+                    }
+                } catch (err) {
+                    modalMessage.textContent = 'Error connecting to the server.';
+                    modalMessage.style.color = '#d9534f';
+                }
+            });
+
+            logoutBtnDesktop.addEventListener('click', logout);
+            logoutBtnMobile.addEventListener('click', logout);
+
+
+
+            openRegisterModalBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetForms();
+                loginModalOverlay.style.display = 'none';
+                registerModalOverlay.style.display = 'flex';
+            });
+
+            openLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetForms();
+                registerModalOverlay.style.display = 'none';
+                loginModalOverlay.style.display = 'flex';
+            });
+
+            registerModalCloseBtn.addEventListener('click', () => {
+                registerModalOverlay.style.display = 'none';
+            });
+            registerModalOverlay.addEventListener('click', (e) => {
+                if (e.target === registerModalOverlay) {
+                    registerModalOverlay.style.display = 'none';
+                }
+            });
+
+            customerRegisterForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                registerMessage.textContent = 'Creating account...';
+                registerMessage.style.color = 'var(--text-muted)';
+
+                const username = document.getElementById('reg-username').value;
+                const email = document.getElementById('reg-email').value;
+                const password = document.getElementById('reg-password').value;
+
+                const registerData = {
+                    username: username,
+                    email: email,
+                    password: password,
+                    role: 'customer' 
+                };
+
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(registerData)
+                    });
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        registerMessage.textContent = 'Success! Please log in.';
+                        registerMessage.style.color = 'var(--success)';
+                        setTimeout(() => {
+                            registerModalOverlay.style.display = 'none';
+                            loginModalOverlay.style.display = 'flex';
+                            resetForms();
+                        }, 2000);
+                    } else {
+                        registerMessage.textContent = data.msg || 'Registration failed.';
+                        registerMessage.style.color = '#d9534f';
+                    }
+                } catch (err) {
+                    registerMessage.textContent = 'Error connecting to the server.';
+                    registerMessage.style.color = '#d9534f';
+                }
+            });
+        });
+
+        // --- 6. SPECIAL OFFERS FETCH FUNCTION ---
+        async function fetchSpecialOffers() {
+            const offersGrid = document.getElementById('special-offers-grid');
+            if (!offersGrid) return;
+            try {
+                const response = await fetch('http://localhost:5000/api/menu');
+                if (!response.ok) throw new Error('Failed to fetch menu');
+                const allItems = await response.json();
+                const specialOffers = allItems.slice(0, 3);
+                if (specialOffers.length === 0) {
+                    offersGrid.innerHTML = '<p style="color: var(--text-muted);">No special offers today.</p>';
+                    return;
+                }
+                offersGrid.innerHTML = '';
+                specialOffers.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'menu-card';
+                    card.innerHTML = `
+                        <div class="menu-card-img-container">
+                            <img src="${item.imageUrl || 'https://via.placeholder.com/300x200'}" alt="${item.name}">
+                        </div>
+                        <div class="menu-card-body">
+                            <h3>${item.name}</h3>
+                            <p>${item.description || 'No description available.'}</p>
+                        </div>
+                        <div class="menu-card-footer">
+                            <span class="price">₹${item.price.toFixed(2)}</span>
+                            <a href="menu.html" class="add-btn" style="text-decoration: none;">
+                                <i class="fa-solid fa-plus"></i> View
+                            </a>
+                        </div>
+                    `;
+                    offersGrid.appendChild(card);
+                });
+            } catch (err) {
+                console.error(err);
+                offersGrid.innerHTML = '<p style="color: red;">Could not load offers.</p>';
+            }
+        }
+    </script>
+</body>
+
+</html>
